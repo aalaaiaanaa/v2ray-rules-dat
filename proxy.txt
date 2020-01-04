@@ -10,4 +10,3 @@ cxkcloud.com
 china-internet-exchange.com
 stc-server.com
 zind.cloud
-github.blog
