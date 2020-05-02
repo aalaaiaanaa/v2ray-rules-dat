@@ -4,39 +4,39 @@
 
 ## 说明
 
-本项目支持命令行版本 V2Ray 客户端。第三方桌面图形界面版（GUI）V2Ray 客户端一般有自身图形化配置界面，但一般也都支持使用 V2Ray 自定义 JSON 配置和 dat 规则文件，请自行研究并修改配置。第三方移动端 V2Ray 客户端情况比较复杂，大概率不支持自定义 V2Ray JSON 配置和使用 dat 规则文件，请知悉。
+本项目适用于命令行版本 V2Ray 客户端。第三方桌面图形界面版（GUI）V2Ray 客户端一般都有路由规则图形化配置界面，但一般也都支持使用自定义 V2Ray JSON 配置和 dat 规则文件，请自行研究并修改配置。第三方移动设备版 V2Ray 客户端情况比较复杂，大概率不支持使用自定义 V2Ray JSON 配置和 dat 规则文件，请知悉。
 
 ## 规则文件生成方式
 
 ### geoip.dat
 
-- 通过仓库 [@v2ray/geoip](https://github.com/v2ray/geoip) 生成
-- 其中 IP 地址来源于 [MaxMind 免费 IP](https://dev.maxmind.com/geoip/geoip2/geolite2/)
+- 通过仓库 [@Loyalsoldier/geoip](https://github.com/Loyalsoldier/geoip) 生成
+- 其中全球 IP 地址（IPv4 和 IPv6）来源于 [MaxMind GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/)，`CN`（中国大陆）类别下的 IPv4 地址来源于 [@17mon/china_ip_list](https://github.com/17mon/china_ip_list/blob/master/china_ip_list.txt)
 
 ### geosite.dat
 
 - 通过仓库 [@v2ray/domain-list-community](https://github.com/v2ray/domain-list-community) 生成
-- **加入大量中国大陆域名、Apple 域名、Google 域名和部分海外 CDN 域名**：
+- **加入大量中国大陆域名、Apple 域名和 Google 域名**：
   - [@felixonmars/dnsmasq-china-list/accelerated-domains.china.conf](https://github.com/felixonmars/dnsmasq-china-list/blob/master/accelerated-domains.china.conf) 加入到 `geosite:cn` 类别中
   - [@felixonmars/dnsmasq-china-list/apple.china.conf](https://github.com/felixonmars/dnsmasq-china-list/blob/master/apple.china.conf) 加入到 `geosite:geolocation-!cn` 类别中
   - [@felixonmars/dnsmasq-china-list/google.china.conf](https://github.com/felixonmars/dnsmasq-china-list/blob/master/google.china.conf) 加入到 `geosite:geolocation-!cn` 类别中
-  - [@felixonmars/dnsmasq-china-list/removed-cdn.txt](https://github.com/felixonmars/dnsmasq-china-list/blob/master/removed-cdn.txt) 加入到 `geosite:geolocation-!cn` 类别中
 - **加入最新 GFWList 域名**：通过仓库 [@cokebar/gfwlist2dnsmasq](https://github.com/cokebar/gfwlist2dnsmasq) 生成并加入到 `geosite:geolocation-!cn` 类别中
 - **加入 Greatfire Analyzer 检测到的屏蔽域名**：通过仓库 [@wongsyrone/domain-block-list](https://github.com/wongsyrone/domain-block-list) 获取 [Greatfire Analyzer](https://zh.greatfire.org/analyzer) 检测到的屏蔽域名，并加入到 `geosite:geolocation-!cn` 类别中
 - **加入更多代理域名和广告域名**：通过仓库 [@ConnersHua/Profiles](https://github.com/ConnersHua/Profiles/tree/master)、[@GeQ1an/Rules](https://github.com/GeQ1an/Rules/tree/master/QuantumultX) 和 [@lhie1/Rules](https://github.com/lhie1/Rules/tree/master) 获取更多代理域名、广告域名，并分别加入到 `geosite:geolocation-!cn` 和 `geosite:category-ads-all` 类别中
-- **加入自定义直连和代理域名**：由于上游域名列表更新缓慢或缺失某些被屏蔽的域名，所以引入自定义域名列表，主要为了解决在 DNS 解析 `A` 和 `AAAA` 记录时的 DNS 泄漏问题。[`hidden` 分支](https://github.com/Loyalsoldier/v2ray-rules-dat/tree/hidden)里有两个文件 `direct.txt` 和 `proxy.txt`，分别放置自定义的直连、代理域名，最终分别加入到 `geosite:cn` 和 `geosite:geolocation-!cn` 类别中
+- **可添加自定义直连、代理和广告域名**：由于上游域名列表更新缓慢或缺失某些域名，所以引入**需要添加的域名**列表。[`hidden 分支`](https://github.com/Loyalsoldier/v2ray-rules-dat/tree/hidden)里的三个文件 `direct.txt`、`proxy.txt` 和 `reject.txt`，分别存放自定义的需要添加的直连、代理、广告域名，最终分别加入到 `geosite:cn`、`geosite:geolocation-!cn` 和 `geosite:category-ads-all` 类别中
+- **可移除自定义直连、代理和广告域名**：由于上游域名列表存在需要被移除的域名，所以引入**需要移除的域名**列表。[`hidden 分支`](https://github.com/Loyalsoldier/v2ray-rules-dat/tree/hidden)里的三个文件 `direct-need-to-remove.txt`、`proxy-need-to-remove.txt` 和 `reject-need-to-remove.txt`，分别存放自定义的需要从 `direct-list`（直连域名列表）、`proxy-list`（代理域名列表）和 `reject-list`（广告域名列表） 移除的域名
 
 ## 规则文件下载及使用方式
 
 **下载地址**：
 
-- **geoip.dat**：[https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat](https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat)
-- **geosite.dat**：[https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat](https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat)
+- **geoip.dat**：[https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geoip.dat](https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geoip.dat)
+- **geosite.dat**：[https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat](https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat)
 
 **使用方式**：
 
-1. 通过上面下载地址或[点击进入规则文件发布页面](https://github.com/Loyalsoldier/v2ray-rules-dat/releases)，下载 `geoip.dat` 和 `geosite.dat`
-2. 把下载下来的 `geoip.dat` 和 `geosite.dat` 文件放入到 V2Ray 软件的规则文件目录，替换掉原来的 `geoip.dat` 和 `geosite.dat`
+1. 点击上面下载地址，下载 `geoip.dat` 和 `geosite.dat`
+2. 把下载下来的 `geoip.dat` 和 `geosite.dat` 文件放入到 V2Ray 的规则文件目录，替换掉原来的 `geoip.dat` 和 `geosite.dat`
 3. 修改 V2Ray 配置文件，配置参考下面 👇👇👇
 
 ## 参考配置
@@ -129,7 +129,7 @@
 - 下面客户端配置使 V2Ray 在本机开启 SOCKS 代理（监听 1080 端口）和 HTTP 代理（监听 2080 端口）
 - BT 流量统统直连（实测依然会有部分 BT 流量走代理，尚不清楚是不是 V2Ray 的 bug。如果服务商禁止 BT 下载的话，请不要为下载软件设置代理）
 - 最后，不命中任何路由规则的请求和流量，统统走代理
-- `outbounds` 里的第一个大括号内的配置，即为 V2Ray 代理服务的配置。请根据自身需求进行修改，并参照 V2Ray 官网配置说明中的 [配置文件 > 文件格式 > OutboundObject](https://v2ray.com/chapter_02/01_overview.html#outboundobject) 部分进行补全
+- `outbounds` 里的第一个大括号内的配置，即为 V2Ray 代理服务的配置。请根据自身需求进行修改，并参照 V2Ray 官网配置说明中的 [配置文件 > 文件格式 > OutboundObject](https://www.v2fly.org/chapter_02/01_overview.html#outboundobject) 部分进行补全
 
 ```json
 {
@@ -137,12 +137,14 @@
     "loglevel": "warning"
   },
   "dns": {
+    "hosts": {
+      "dns.google": "8.8.8.8"
+    },
     "servers": [
       {
         "address": "https://1.1.1.1/dns-query",
         "domains": [
-          "geosite:geolocation-!cn",
-          "geosite:speedtest"
+          "geosite:geolocation-!cn"
         ]
       },
       "https://1.1.1.1/dns-query",
@@ -152,6 +154,9 @@
         "port": 53,
         "domains": [
           "geosite:cn"
+        ],
+        "expectIPs": [
+          "geoip:cn"
         ]
       }
     ]
@@ -219,6 +224,11 @@
     "rules": [
       {
         "type": "field",
+        "outboundTag": "Direct",
+        "protocol": ["bittorrent"]
+      },
+      {
+        "type": "field",
         "outboundTag": "Dns-Out",
         "inboundTag": [
           "Socks-In",
@@ -226,11 +236,6 @@
         ],
         "network": "udp",
         "port": 53
-      },
-      {
-        "type": "field",
-        "outboundTag": "Direct",
-        "protocol": ["bittorrent"]
       },
       {
         "type": "field",
@@ -243,8 +248,7 @@
         "type": "field",
         "outboundTag": "Proxy",
         "domain": [
-          "geosite:geolocation-!cn",
-          "geosite:speedtest"
+          "geosite:geolocation-!cn"
         ]
       },
       {
@@ -285,10 +289,7 @@
       {
         "type": "field",
         "outboundTag": "Proxy",
-        "ip": [
-          "0.0.0.0/0",
-          "::/0"
-        ]
+        "network": "tcp,udp"
       }
     ]
   }
@@ -299,6 +300,7 @@
 
 - [@v2ray/geoip](https://github.com/v2ray/geoip)
 - [@v2ray/domain-list-community](https://github.com/v2ray/domain-list-community)
+- [@17mon/china_ip_list](https://github.com/17mon/china_ip_list/blob/master/china_ip_list.txt)
 - [@felixonmars/dnsmasq-china-list](https://github.com/felixonmars/dnsmasq-china-list)
 - [@gfwlist/gfwlist](https://github.com/gfwlist/gfwlist)
 - [@cokebar/gfwlist2dnsmasq](https://github.com/cokebar/gfwlist2dnsmasq)
@@ -306,4 +308,4 @@
 - [@ConnersHua/Profiles](https://github.com/ConnersHua/Profiles/tree/master)
 - [@GeQ1an/Rules](https://github.com/GeQ1an/Rules/tree/master/QuantumultX)
 - [@lhie1/Rules](https://github.com/lhie1/Rules/tree/master)
-- [MaxMind 免费 IP](https://dev.maxmind.com/geoip/geoip2/geolite2/)
+- [MaxMind GeoLite2 Free IP Database](https://dev.maxmind.com/geoip/geoip2/geolite2/)
